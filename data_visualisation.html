@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizualizare date</title>
+    <link rel = "stylesheet" href = "vizualizare_date.css">
+</head>
+<body>
+    
+    <select id = "selectorIndicator" name = "indicator">
+        <option value = "" disabled selected>Indicator</option>
+        <option value = "demo_pjan?" id = "populatie">Population on 1 January by age and sex</option>
+        <option value = "demo_mlexpec?" id = "sv">Life expectancy by age and sex</option>
+        <option value = "sdg_08_10?" id = "pib">Real GDP per capita</option>
+    </select>
+
+    <select id="selectorTara" name = "tara">
+        <option value = "" disabled selected>Tara</option>
+        <option value="AT">Austria</option>
+        <option value="BE">Belgia</option>
+        <option value="BG">Bulgaria</option>
+        <option value="CY">Cipru</option>
+        <option value="CZ">Cehia</option>
+        <option value="DE">Germania</option>
+        <option value="DK">Danemarca</option>
+        <option value="EE">Estonia</option>
+        <option value="EL">Grecia</option>
+        <option value="ES">Spania</option>
+        <option value="FI">Finlanda</option>
+        <option value="FR">Franta</option>
+        <option value="HR">Croatia</option>
+        <option value="HU">Ungaria</option>
+        <option value="IE">Irlanda</option>
+        <option value="IT">Italia</option>
+        <option value="LT">Lituania</option>
+        <option value="LU">Luxemburg</option>
+        <option value="LV">Latvia</option>
+        <option value="MT">Malta</option>
+        <option value="NL">Olanda</option>
+        <option value="PL">Polonia</option>
+        <option value="PT">Portugalia</option>
+        <option value="RO">Romania</option>
+        <option value="SE">Suedia</option>
+        <option value="SI">Slovenia</option>
+        <option value="SK">Slovacia</option>
+        <option value="UK">Marea Britanie</option>
+    </select>
+
+    <button id = "submitGrafic">Apasa pentru histograma</button>
+
+    <div id = "valoareSubZero"></div>
+
+    <script src = "vizualizare_date.js"></script>
+</body>
+</html>
