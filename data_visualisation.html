@@ -5,9 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vizualizare date</title>
-    <link rel = "stylesheet" href = "vizualizare_date.css">
+    <link rel = "stylesheet" href = "3_1079_Apostol_Andreea_Liliana.css">
 </head>
 <body>
+  <div class="handlerEroriApi">
+    <p>Eroare neasteptata. Va rugam selectati campurile necesare si reincercati. Daca eroarea persista reveniti mai tarziu!</p>
+  </div>
     
     <select id = "selectorIndicator" name = "indicator">
         <option value = "" disabled selected>Indicator</option>
@@ -50,8 +53,31 @@
 
     <button id = "submitGrafic">Apasa pentru histograma</button>
 
+    <select id = "selectorAn" name = "an">
+        <option value = "" disabled selected>An</option>
+        <option value = "2007">2007</option>
+        <option value = "2008">2008</option>
+        <option value = "2009">2009</option>
+        <option value = "2010">2010</option>
+        <option value = "2011">2011</option>
+        <option value = "2012">2012</option>
+        <option value = "2013">2013</option>
+        <option value = "2014">2014</option>
+        <option value = "2015">2015</option>
+        <option value = "2016">2016</option>
+        <option value = "2017">2017</option>
+        <option value = "2018">2018</option>
+        <option value = "2019">2019</option>
+        <option value = "2020">2020</option>
+        <option value = "2021">2021</option>
+    </select>
+
+    <button id = "arataTabel">Apasa pentru tabel</button>
+
+    <div class="containerTabel"></div>
+
     <div id = "valoareSubZero"></div>
 
-    <script src = "vizualizare_date.js"></script>
+    <script src = "3_1079_Apostol_Andreea_Liliana.js"></script>
 </body>
 </html>
