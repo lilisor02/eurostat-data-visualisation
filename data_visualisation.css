@@ -1,3 +1,12 @@
+.handlerEroriApi p {
+    display: none;
+    color: #ff1515d6;
+}
+
+.handlerEroriApi p.active {
+    display: block;
+}
+
 .containerHistograma {
     border-left: 2px #000 solid;
     border-bottom: 2px #000 solid;
@@ -30,14 +39,48 @@
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
+    top: -15px;
     z-index: 1;
+}
+
+.histogramaContainer:hover {
+    cursor: pointer;
 }
 
 .histogramaContainer:hover .tooltiptext {
     visibility: visible;
 }
 
+.histogramaContainer .newSVG line:hover {
+    stroke: #87cefa;
+}
+
 #valoareSubZero {
     color: red;
     margin-top: 20px;
 }
+
+table.tabelDate {
+    width: 100%;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    border-width: 2px;
+    border-color: #ffcc00;
+    border-style: solid;
+    color: #000000;
+  }
+  
+  /* table.tabelDate.active {
+    display: table;
+  } */
+
+  table.tabelDate td, table.tabelDate th {
+    border-width: 2px;
+    border-color: #ffcc00;
+    border-style: solid;
+    padding: 3px;
+  }
+  
+  table.tabelDate thead {
+    background-color: #ffcc00;
+  }
