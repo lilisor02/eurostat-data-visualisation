@@ -1,3 +1,4 @@
+const baseURL = "https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/";
 let selectorIndicator;
 let selectorTara;
 let selectorAn;
@@ -24,6 +25,8 @@ let ani = {
     14 : "2021"
 }
 
+let apiError = document.querySelector('.handlerEroriApi p');
+
 // la schimbarea indicatorului, inregistram valoarea in selectorIndicator si adaugam unitul corespunzator
 document.querySelector("#selectorIndicator").addEventListener("change", () => {
     if (document.querySelector("#selectorIndicator").value == "demo_pjan?") {
@@ -46,49 +49,65 @@ document.querySelector("#selectorTara").addEventListener("change", () => {
     return selectorTara;
 });
 
-
-// la apasarea butonului, rulam functia getData() care ne aduce datele necesare
-document.querySelector("#submitGrafic").addEventListener("click", () => {
-    const baseURL = "https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/";
-
-    // linkul final pe care il pasam in getData()
-    const requestURL = baseURL + selectorIndicator + "&sinceTimePeriod=2005" + "&geo=" + selectorTara;
-    getData(requestURL);
+// la schimbarea anului, inregistram valoarea in selectorAn
+document.querySelector("#selectorAn").addEventListener("change", () => {
+    selectorAn = document.querySelector("#selectorAn").value;
+    return selectorAn;
 });
 
 
-// la incarcarea documentului, datele se preiau automat conform linkului din getData()
+// la apasarea butonului, rulam functia apiCall() care ne aduce datele necesare
+document.querySelector("#submitGrafic").addEventListener("click", () => {
+    getHistogramData();
+});
+
+// la apasare arataTabel, daca anul e selectat desenam tabel
+document.querySelector("#arataTabel").addEventListener("click", () => {
+    if (selectorAn == undefined) {
+        alert("Pentru a vizualiza tabel, selectati un an.");
+        return;    
+    }
+    getTableData();
+    // document.querySelector('.tabelDate').classList.add("active");
+});
+
+// la incarcarea documentului, datele se preiau automat conform linkului din apiCall()
 // document.addEventListener('DOMContentLoaded', () => {
 
-//     getData("https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/demo_pjan?precision=1&sex=T&age=Y1");
+//     apiCall("https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/demo_pjan?precision=1&sex=T&age=Y1");
 // })
 
-// functia getData() pentru preluarea datelor de la API
-const getData = async (apiURL) => {
-    const response = await fetch (apiURL);
-    const data = await response.json();
-    showData(data);
-    arataHistograma(data);
-    // daca avem eroare, vom alerta utilizatorul
-    if (data.error) {
-        alert("Eroare neasteptata. Va rugam selectati o valoare sau incercati mai tarziu.");
+// functia apiCall() pentru preluarea datelor de la API
+const apiCall = async (apiURL) => {
+    try {
+        let response = await fetch (apiURL);
+        return await response.json();
+    } catch(error) {
+        console.error(error);
     }
 }
 
-const showData = (data) => {
+const getHistogramData = async () => {
+    let data = await apiCall(baseURL + selectorIndicator + "&sinceTimePeriod=2005" + "&geo=" + selectorTara);
+
+    if(data.error) {
+        apiError.classList.add('active');
+        return;
+    }
+    
+    apiError.classList.remove('active');
     let dataValue = data.value;
     let valueAn = Object.values(dataValue);
     let keyAn = Object.keys(dataValue);
+    arataHistograma(data);
 }
 
 // la apasarea butonului "" preluam datele si creand dinamic elemente HTML le aratam utilizatorului
 const arataHistograma = (data) => {
-
     // daca deja avem date afisate le stergem
     if (document.querySelector('.containerHistograma')) {
         document.querySelector('.containerHistograma').parentNode.removeChild(document.querySelector('.containerHistograma'));
     }
-
     // cream elemente HTML dinamic pentru a arata datele utilizatorului
     let containerHistograma = document.createElement("div");
     containerHistograma.classList.add("containerHistograma");
@@ -96,10 +115,8 @@ const arataHistograma = (data) => {
     unitHistograma.classList.add("unitHistograma");
     containerHistograma.appendChild(unitHistograma);
     document.body.appendChild(containerHistograma);
-
     // parcurgem obiectul si pentru fiecare valoare cream un SVG element care indica valoarea obiectului
     for (const [key, value] of Object.entries(data.value)) {
-
         // compara obiectul de la api cu obiectul ani si pentru fiecare cheie comuna intoarce valoarea anului
         const comparaObiecte = (tooltip) => {
             for (const [aniKey, aniValue] of Object.entries(ani)) {
@@ -108,7 +125,6 @@ const arataHistograma = (data) => {
                 }
             }
         }
-
         let histogramaContainer = document.createElement("div");
         histogramaContainer.classList.add("histogramaContainer");
         let newSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -129,7 +145,6 @@ const arataHistograma = (data) => {
             let numarPopulatieFormat = Math.floor(numarPopulatie/1000);
             newSVG.setAttribute('height',numarPopulatieFormat);
             containerHistograma.style.height = "100%";
-
         }
 
         if (`${value}` > 0) {
@@ -164,9 +179,7 @@ const arataHistograma = (data) => {
                 comparaObiecte(tooltip);
                 unitHistograma.innerText = "Numar";
                 svgPath.setAttribute('y2',numarPopulatieFormat);
-
             }
-
             histogramaContainer.appendChild(tooltip);
             histogramaContainer.appendChild(newSVG);
             document.querySelector(".containerHistograma").appendChild(histogramaContainer);
@@ -174,5 +187,59 @@ const arataHistograma = (data) => {
 
     }  
 }
+// demo_pjan?, demo_mlexpec?, sdg_08_10?
+const getTableData = async () => {
+    // Un array gol in care vom pune toate cele 3 obiecte venite de la API
+    let dateEurostat = [];
+    let dataPopulatie = await apiCall(baseURL + "demo_pjan?precision=1&sex=T&age=Y1" + "&time=" + selectorAn + "&geo=BE&geo=BG&geo=CZ&geo=DK&geo=DE&geo=EE&geo=IE&geo=EL&geo=ES&geo=FR&geo=HR&geo=IT&geo=CY&geo=LV&geo=LT&geo=LU&geo=HU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SI&geo=SK&geo=FI&geo=SE");
+    let dataSperantaViata = await apiCall(baseURL + "demo_mlexpec?precision=1&sex=T&age=Y1" + "&time=" + selectorAn + "&geo=BE&geo=BG&geo=CZ&geo=DK&geo=DE&geo=EE&geo=IE&geo=EL&geo=ES&geo=FR&geo=HR&geo=IT&geo=CY&geo=LV&geo=LT&geo=LU&geo=HU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SI&geo=SK&geo=FI&geo=SE");
+    let dataGDP = await apiCall(baseURL + "sdg_08_10?&unit=CLV_PCH_PRE_HAB&na_item=B1GQ" + "&time=" + selectorAn + "&geo=BE&geo=BG&geo=CZ&geo=DK&geo=DE&geo=EE&geo=IE&geo=EL&geo=ES&geo=FR&geo=HR&geo=IT&geo=CY&geo=LV&geo=LT&geo=LU&geo=HU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SI&geo=SK&geo=FI&geo=SE");
+    // Populam array dateEurostat cu cele 3 obiecte de la API
+    dateEurostat.push(dataPopulatie);
+    dateEurostat.push(dataSperantaViata);
+    dateEurostat.push(dataGDP);
+    // Desenam si populam tabelul
+    populeazaTabel(dateEurostat);
+}
 
+const populeazaTabel = (dateEurostat) => {
+    console.log(dateEurostat);
+    // Daca nu avem date in array ne oprim
+    if(dateEurostat.length == 0) return;
 
+    //Desenam si populam tabelul
+    let containerTabel = document.querySelector('.containerTabel');
+    let tabel = ``;
+    tabel += `<table class="tabelDate">`
+        tabel += `<thead>`;
+            tabel += `<tr>`;
+                tabel += `<th>Tara</th>`;
+                dateEurostat.map(item => {
+                    const { label } = item;
+                    tabel += `<th>${label}</th>`;
+                });
+            tabel += `</tr>`;
+        tabel += `</thead>`;
+        tabel += `<tbody>`;
+            const { dimension : { geo : { category : { label : numeTara } } }, value : valoriPopulatie } =  dateEurostat[0];
+            const { value : valoriSperantaViata } =  dateEurostat[1];
+            const { value : valoriGDP } =  dateEurostat[2];
+            index = 0;
+            for (const [key, value] of Object.entries(numeTara)) {
+                tabel += `<tr>`;
+                    tabel += `<td>${value}</td>`;
+                    tabel += `<td>${valoriPopulatie[index]}</td>`;
+                    tabel += `<td>${valoriSperantaViata[index]}</td>`;
+                    tabel += `<td>${valoriGDP[index]}</td>`;
+                tabel += `</tr>`;
+                index++;
+            };
+        tabel += `</tbody>`;
+    tabel += `</table>`;
+
+    // Adaugam tabelul in DOM
+    let tabelHtml = new DOMParser().parseFromString(tabel, "text/html");
+    tabelHtml = tabelHtml.getRootNode();
+    containerTabel.innerHTML = "";
+    containerTabel.append(tabelHtml.body);
+}
