@@ -27,7 +27,7 @@ let ani = {
 
 let apiError = document.querySelector('.handlerEroriApi p');
 
-// la schimbarea indicatorului, inregistram valoarea in selectorIndicator si adaugam unitul corespunzator
+//when changing the indicator, we record the value in the Indicator selector and add the corresponding unit
 document.querySelector("#selectorIndicator").addEventListener("change", () => {
     if (document.querySelector("#selectorIndicator").value == "demo_pjan?") {
         selectorIndicator = document.querySelector("#selectorIndicator").value + unit[0];
@@ -43,25 +43,25 @@ document.querySelector("#selectorIndicator").addEventListener("change", () => {
     }
 });
 
-// la schimbarea tarii, inregistram valoarea in selectorTara
+// when changing the country, we record the value in the Country selector
 document.querySelector("#selectorTara").addEventListener("change", () => {
     selectorTara = document.querySelector("#selectorTara").value;
     return selectorTara;
 });
 
-// la schimbarea anului, inregistram valoarea in selectorAn
+// when changing the year, we record the value in the Year selector
 document.querySelector("#selectorAn").addEventListener("change", () => {
     selectorAn = document.querySelector("#selectorAn").value;
     return selectorAn;
 });
 
 
-// la apasarea butonului, rulam functia apiCall() care ne aduce datele necesare
+// when pressing the button, we run the apiCall() function that brings us the necessary data
 document.querySelector("#submitGrafic").addEventListener("click", () => {
     getHistogramData();
 });
 
-// la apasare arataTabel, daca anul e selectat desenam tabel
+// when pressing arataTabel, if the year is selected we draw a table
 document.querySelector("#arataTabel").addEventListener("click", () => {
     if (selectorAn == undefined) {
         alert("Pentru a vizualiza tabel, selectati un an.");
@@ -71,13 +71,13 @@ document.querySelector("#arataTabel").addEventListener("click", () => {
     // document.querySelector('.tabelDate').classList.add("active");
 });
 
-// la incarcarea documentului, datele se preiau automat conform linkului din apiCall()
+// when uploading the document, the data is automatically retrieved according to the link in apiCall()
 // document.addEventListener('DOMContentLoaded', () => {
 
 //     apiCall("https://ec.europa.eu/eurostat/wdds/rest/data/v2.1/json/en/demo_pjan?precision=1&sex=T&age=Y1");
 // })
 
-// functia apiCall() pentru preluarea datelor de la API
+// apiCall() function for retrieving data from the API
 const apiCall = async (apiURL) => {
     try {
         let response = await fetch (apiURL);
@@ -102,22 +102,22 @@ const getHistogramData = async () => {
     arataHistograma(data);
 }
 
-// la apasarea butonului "" preluam datele si creand dinamic elemente HTML le aratam utilizatorului
+// when pressing the "" button, we retrieve the data and dynamically create HTML elements and show them to the user
 const arataHistograma = (data) => {
-    // daca deja avem date afisate le stergem
+    // if we already have displayed data, we delete it
     if (document.querySelector('.containerHistograma')) {
         document.querySelector('.containerHistograma').parentNode.removeChild(document.querySelector('.containerHistograma'));
     }
-    // cream elemente HTML dinamic pentru a arata datele utilizatorului
+    // creating dynamic HTML elements to show data to the user
     let containerHistograma = document.createElement("div");
     containerHistograma.classList.add("containerHistograma");
     let unitHistograma = document.createElement("span");
     unitHistograma.classList.add("unitHistograma");
     containerHistograma.appendChild(unitHistograma);
     document.body.appendChild(containerHistograma);
-    // parcurgem obiectul si pentru fiecare valoare cream un SVG element care indica valoarea obiectului
+    // we go through the object and for each value we create an SVG element that indicates the value of the object
     for (const [key, value] of Object.entries(data.value)) {
-        // compara obiectul de la api cu obiectul ani si pentru fiecare cheie comuna intoarce valoarea anului
+        // compare the api object with the year object and for each common key return the year value
         const comparaObiecte = (tooltip) => {
             for (const [aniKey, aniValue] of Object.entries(ani)) {
                 if (`${key}` == `${aniKey}`) {
@@ -189,25 +189,25 @@ const arataHistograma = (data) => {
 }
 // demo_pjan?, demo_mlexpec?, sdg_08_10?
 const getTableData = async () => {
-    // Un array gol in care vom pune toate cele 3 obiecte venite de la API
+    // an empty array in which we will put all 3 objects from the API
     let dateEurostat = [];
     let dataPopulatie = await apiCall(baseURL + "demo_pjan?precision=1&sex=T&age=Y1" + "&time=" + selectorAn + "&geo=BE&geo=BG&geo=CZ&geo=DK&geo=DE&geo=EE&geo=IE&geo=EL&geo=ES&geo=FR&geo=HR&geo=IT&geo=CY&geo=LV&geo=LT&geo=LU&geo=HU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SI&geo=SK&geo=FI&geo=SE");
     let dataSperantaViata = await apiCall(baseURL + "demo_mlexpec?precision=1&sex=T&age=Y1" + "&time=" + selectorAn + "&geo=BE&geo=BG&geo=CZ&geo=DK&geo=DE&geo=EE&geo=IE&geo=EL&geo=ES&geo=FR&geo=HR&geo=IT&geo=CY&geo=LV&geo=LT&geo=LU&geo=HU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SI&geo=SK&geo=FI&geo=SE");
     let dataGDP = await apiCall(baseURL + "sdg_08_10?&unit=CLV_PCH_PRE_HAB&na_item=B1GQ" + "&time=" + selectorAn + "&geo=BE&geo=BG&geo=CZ&geo=DK&geo=DE&geo=EE&geo=IE&geo=EL&geo=ES&geo=FR&geo=HR&geo=IT&geo=CY&geo=LV&geo=LT&geo=LU&geo=HU&geo=MT&geo=NL&geo=AT&geo=PL&geo=PT&geo=RO&geo=SI&geo=SK&geo=FI&geo=SE");
-    // Populam array dateEurostat cu cele 3 obiecte de la API
+    // populating the Eurostat data array with the 3 objects from the API
     dateEurostat.push(dataPopulatie);
     dateEurostat.push(dataSperantaViata);
     dateEurostat.push(dataGDP);
-    // Desenam si populam tabelul
+    // drawing and populating the table
     populeazaTabel(dateEurostat);
 }
 
 const populeazaTabel = (dateEurostat) => {
     console.log(dateEurostat);
-    // Daca nu avem date in array ne oprim
+    // if we have no data in the array, we stop
     if(dateEurostat.length == 0) return;
 
-    //Desenam si populam tabelul
+    // drawing and populating the table
     let containerTabel = document.querySelector('.containerTabel');
     let tabel = ``;
     tabel += `<table class="tabelDate">`
@@ -237,7 +237,7 @@ const populeazaTabel = (dateEurostat) => {
         tabel += `</tbody>`;
     tabel += `</table>`;
 
-    // Adaugam tabelul in DOM
+    // adding the table to the DOM
     let tabelHtml = new DOMParser().parseFromString(tabel, "text/html");
     tabelHtml = tabelHtml.getRootNode();
     containerTabel.innerHTML = "";
