@@ -64,7 +64,7 @@ document.querySelector("#submitGrafic").addEventListener("click", () => {
 // when pressing arataTabel, if the year is selected we draw a table
 document.querySelector("#arataTabel").addEventListener("click", () => {
     if (selectorAn == undefined) {
-        alert("Pentru a vizualiza tabel, selectati un an.");
+        alert("For visualizing the table, please select a year! ");
         return;    
     }
     getTableData();
@@ -121,7 +121,7 @@ const arataHistograma = (data) => {
         const comparaObiecte = (tooltip) => {
             for (const [aniKey, aniValue] of Object.entries(ani)) {
                 if (`${key}` == `${aniKey}`) {
-                    tooltip.innerText += " An: " + `${aniValue}`;
+                    tooltip.innerText += " Year: " + `${aniValue}`;
                 }
             }
         }
@@ -132,7 +132,7 @@ const arataHistograma = (data) => {
         newSVG.setAttribute('width','20');
 
         if (`${value}` < 0) {
-            document.querySelector("#valoareSubZero").innerText = "Valorile sub 1 nu se vor printa";
+            document.querySelector("#valoareSubZero").innerText = "Values under 1 won't be showed";
             continue;
         }
 
@@ -155,7 +155,7 @@ const arataHistograma = (data) => {
             svgPath.setAttribute('x1','0');
             svgPath.setAttribute('y1','0');
             svgPath.setAttribute('x2','0');
-            unitHistograma.innerText = "Ani";
+            unitHistograma.innerText = "Years";
             svgPath.setAttribute('y2',`${value}`);
             newSVG.appendChild(svgPath);
             let tooltip = document.createElement("span");
@@ -177,7 +177,7 @@ const arataHistograma = (data) => {
                 let numarPopulatieFormat = Math.floor(numarPopulatie/1000);
                 tooltip.innerText = numarPopulatieFormat + "K";
                 comparaObiecte(tooltip);
-                unitHistograma.innerText = "Numar";
+                unitHistograma.innerText = "Number";
                 svgPath.setAttribute('y2',numarPopulatieFormat);
             }
             histogramaContainer.appendChild(tooltip);
@@ -213,7 +213,7 @@ const populeazaTabel = (dateEurostat) => {
     tabel += `<table class="tabelDate">`
         tabel += `<thead>`;
             tabel += `<tr>`;
-                tabel += `<th>Tara</th>`;
+                tabel += `<th>Country</th>`;
                 dateEurostat.map(item => {
                     const { label } = item;
                     tabel += `<th>${label}</th>`;
