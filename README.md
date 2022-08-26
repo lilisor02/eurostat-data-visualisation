@@ -4,7 +4,7 @@
 
 Application using a Eurostat REST API, that shows a graphical evolution of an indicator and a country selected by the user using a histogram. The available data is displayed as a table for a year selected by the user.
 
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/72099239/186208456-100a6d0b-9d44-4972-94df-37f642e86dcf.gif)
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/72099239/186984681-b1e8a413-5260-4ef9-b501-6fd757468827.gif)
 
 ## Why is it?
 
