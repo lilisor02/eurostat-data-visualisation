@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vizualizare date</title>
+    <title>Data Visualisation</title>
     <link rel = "stylesheet" href = "data_visualisation.css">
 </head>
 <body>
   <div class="handlerEroriApi">
-    <p>Eroare neasteptata. Va rugam selectati campurile necesare si reincercati. Daca eroarea persista reveniti mai tarziu!</p>
+    <p>Unexpected error. Please select the necessary fields and try again. If the error remains, please try again later!</p>
   </div>
     
     <select id = "selectorIndicator" name = "indicator">
@@ -20,7 +20,7 @@
     </select>
 
     <select id="selectorTara" name = "tara">
-        <option value = "" disabled selected>Tara</option>
+        <option value = "" disabled selected>Country</option>
         <option value="AT">Austria</option>
         <option value="BE">Belgia</option>
         <option value="BG">Bulgaria</option>
@@ -51,10 +51,10 @@
         <option value="UK">Marea Britanie</option>
     </select>
 
-    <button id = "submitGrafic">Apasa pentru histograma</button>
+    <button id = "submitGrafic">Press for histogram</button>
 
     <select id = "selectorAn" name = "an">
-        <option value = "" disabled selected>An</option>
+        <option value = "" disabled selected>Year</option>
         <option value = "2007">2007</option>
         <option value = "2008">2008</option>
         <option value = "2009">2009</option>
@@ -72,7 +72,7 @@
         <option value = "2021">2021</option>
     </select>
 
-    <button id = "arataTabel">Apasa pentru tabel</button>
+    <button id = "arataTabel">Press for table</button>
 
     <div class="containerTabel"></div>
 
